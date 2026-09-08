@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+
+    <record id="view_employee_asset_request_list" model="ir.ui.view">
+        <field name="name">employee.asset.request.list</field>
+        <field name="model">employee.asset.request</field>
+        <field name="arch" type="xml">
+            <list string="Asset Requests">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="asset_type"/>
+                <field name="request_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_employee_asset_request_form" model="ir.ui.view">
+        <field name="name">employee.asset.request.form</field>
+        <field name="model">employee.asset.request</field>
+        <field name="arch" type="xml">
+
+            <form string="Asset Request">
+
+                <header>
+
+                    <button
+                        name="action_submit"
+                        string="Submit"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+
+                    <button
+                        name="action_approve"
+                        string="Approve"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'submitted'"
+                    />
+
+                    <button
+                        name="action_reject"
+                        string="Reject"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="state != 'submitted'"
+                    />
+
+                    <button
+                        name="action_reset_to_draft"
+                        string="Reset to Draft"
+                        type="object"
+                        invisible="state not in ['submitted', 'approved', 'rejected']"
+                    />
+
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,submitted,approved,rejected"
+                    />
+
+                </header>
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                            <field name="asset_type"/>
+                            <field name="request_date"/>
+                        </group>
+
+                        <group>
+                            <field name="state" readonly="1"/>
+                        </group>
+
+                    </group>
+
+                    <group>
+                        <field name="reason"/>
+                    </group>
+
+                </sheet>
+
+            </form>
+
+        </field>
+    </record>
+
+    <record id="action_employee_asset_request" model="ir.actions.act_window">
+        <field name="name">Asset Requests</field>
+        <field name="res_model">employee.asset.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <menuitem
+        id="menu_employee_asset_request_root"
+        name="Employee Assets"
+        sequence="10"
+        groups="base.group_user"
+    />
+
+  
+    <menuitem
+        id="menu_employee_asset_request"
+        name="Asset Requests"
+        parent="menu_employee_asset_request_root"
+        action="action_employee_asset_request"
+        sequence="10"
+        groups="base.group_user"
+    />
+
+</odoo>
